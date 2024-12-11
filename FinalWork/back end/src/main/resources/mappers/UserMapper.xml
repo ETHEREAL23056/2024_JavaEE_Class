@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.finalwork.mappers.UserMapper">
+
+    <resultMap id="UserEntityMap" type="com.my.finalwork.entity.User">
+        <result column="uid" property="uid"/>
+        <result column="name" property="username"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="uid" keyColumn="uid">
+        INSERT INTO users (name, role, password, salt, is_deleted)
+        VALUES (#{username}, #{role}, #{password}, #{salt}, #{isDeleted})
+    </insert>
+
+    <select id="findByUsername" resultMap="UserEntityMap">
+        SELECT *
+        FROM users
+        WHERE name = #{username} AND is_deleted = 0
+    </select>
+
+    <update id="updatePasswordByUserId">
+        UPDATE users
+        SET password=#{password}
+        WHERE uid = #{userId}
+    </update>
+
+    <select id="findByUserId" resultMap="UserEntityMap">
+        SELECT *
+        FROM users
+        WHERE uid = #{userId}
+          AND is_deleted = 0
+    </select>
+
+    <update id="deleteUser">
+        UPDATE users
+        SET is_deleted=1
+        WHERE uid = #{userId}
+    </update>
+</mapper>

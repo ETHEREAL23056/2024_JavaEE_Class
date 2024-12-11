@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--ownerpayment类映射文件-->
+<mapper namespace="com.my.finalwork.mappers.OwnerPaymentMapper">
+
+    <resultMap id="OwnerPaymentEntityMap" type="com.my.finalwork.entity.OwnerPayment">
+        <result column="id" property="id"/>
+        <result column="pid" property="pid"/>
+        <result column="payment_type" property="paymentType"/>
+        <result column="installments" property="installments"/>
+        <result column="payed_installments" property="payedInstallments"/>
+    </resultMap>
+
+    <insert id="addOwnerPayment" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO owner_payments (pid, payment_type, installments, payed_installments)
+        VALUES (#{pid}, #{paymentType}, #{installments}, #{payedInstallments})
+    </insert>
+
+    <update id="updateOwnerPayment">
+        UPDATE owner_payments
+        <set>
+            <if test="paymentType != null">
+                payment_type = #{paymentType},
+            </if>
+            <if test="installments != null">
+                installments = #{installments},
+            </if>
+            <if test="payedInstallments != null">
+                payed_installments = #{payedInstallments},
+            </if>
+        </set>
+        WHERE pid = #{pid}
+    </update>
+
+    <delete id="deleteOwnerPayment">
+        DELETE
+        FROM owner_payments
+        WHERE id = #{opid}
+    </delete>
+
+    <select id="getOwnerPayment" resultMap="OwnerPaymentEntityMap">
+        SELECT *
+        FROM owner_payments
+        WHERE id = #{opid}
+    </select>
+
+    <select id="getOwnerByPaymentId" resultMap="OwnerPaymentEntityMap">
+        SELECT *
+        FROM owner_payments
+        WHERE pid = #{pid}
+    </select>
+
+    <select id="getAllUnfinishedOwnerPayment" resultMap="OwnerPaymentEntityMap">
+        SELECT *
+        FROM owner_payments
+        WHERE payed_installments &lt; installments
+    </select>
+
+    <select id="getAllFinishedOwnerPayment" resultMap="OwnerPaymentEntityMap">
+        SELECT *
+        FROM owner_payments
+        WHERE payed_installments = installments
+    </select>
+
+</mapper>

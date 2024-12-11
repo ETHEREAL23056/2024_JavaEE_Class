@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.finalwork.mappers.PaymentMapper">
+
+    <resultMap id="PaymentEntityMap" type="com.my.finalwork.entity.Payment">
+        <result column="id" property="id"/>
+        <result column="oid" property="oid"/>
+        <result column="year" property="year"/>
+        <result column="month" property="month"/>
+        <result column="is_payed" property="isPayed"/>
+        <result column="water_cost" property="waterCost"/>
+        <result column="electricity_cost" property="electricityCost"/>
+        <result column="gas_cost" property="gasCost"/>
+        <result column="heater_cost" property="heaterCost"/>
+        <result column="estate_cost" property="estateCost"/>
+    </resultMap>
+
+    <insert id="addPayment" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO payments (oid, year, month, is_payed, water_cost, electricity_cost, gas_cost, heater_cost,
+                              estate_cost)
+        VALUES (#{oid}, #{year}, #{month}, #{isPayed}, #{waterCost}, #{electricityCost}, #{gasCost}, #{heaterCost},
+                #{estateCost})
+    </insert>
+
+    <update id="updatePayment">
+        UPDATE payments
+        <set>
+            <if test="oid != null">
+                oid = #{oid},
+            </if>
+            <if test="year != null">
+                year = #{year},
+            </if>
+            <if test="month != null">
+                month = #{month},
+            </if>
+            <if test="isPayed != null">
+                is_payed = #{isPayed},
+            </if>
+            <if test="waterCost != null">
+                water_cost = #{waterCost},
+            </if>
+            <if test="electricityCost != null">
+                electricity_cost = #{electricityCost},
+            </if>
+            <if test="gasCost != null">
+                gas_cost = #{gasCost},
+            </if>
+            <if test="heaterCost != null">
+                heater_cost = #{heaterCost},
+            </if>
+            <if test="estateCost != null">
+                estate_cost = #{estateCost}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deletePayment">
+        DELETE
+        FROM payments
+        WHERE id = #{pid}
+    </delete>
+
+    <select id="getPaymentById" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE id = #{pid}
+    </select>
+
+    <select id="getPaymentsByMonth" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        <where>
+            <if test="year != null">
+                AND year = #{year}
+            </if>
+            <if test="month != null">
+                AND month = #{month}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUnpaidPayments" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE is_payed = 0
+    </select>
+
+    <select id="getPaidPayments" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE is_payed = 1
+    </select>
+
+    <select id="getPaidPaymentsByOwner" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE oid = #{oid} AND is_payed = 1
+    </select>
+
+    <select id="getUnpaidPaymentsByOwner" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE oid = #{oid} AND is_payed = 0
+    </select>
+
+    <select id="getPaymentsByOwner" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE oid = #{oid}
+    </select>
+
+    <select id="getPaymentsByOwnerAndYear" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE oid = #{oid} and year = #{year}
+    </select>
+    <select id="getPayment" resultMap="PaymentEntityMap">
+        SELECT *
+        FROM payments
+        WHERE oid = #{oid} AND year = #{year} AND month =#{month}
+    </select>
+
+</mapper>

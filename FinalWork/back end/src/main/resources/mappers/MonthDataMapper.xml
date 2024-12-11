@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--monthdata类映射文件-->
+<mapper namespace="com.my.finalwork.mappers.MonthDataMapper">
+
+    <resultMap id="MonthDataEntityMap" type="com.my.finalwork.entity.MonthData">
+        <result column="id" property="id"/>
+        <result column="year" property="year"/>
+        <result column="month" property="month"/>
+        <result column="oid" property="oid"/>
+        <result column="water_price" property="WATER_PRICE"/>
+        <result column="water_consumption" property="waterConsumption"/>
+        <result column="electricity_price" property="ELECTRICITY_PRICE"/>
+        <result column="electricity_consumption" property="electricityConsumption"/>
+        <result column="gas_price" property="GAS_PRICE"/>
+        <result column="gas_consumption" property="gasConsumption"/>
+        <result column="heater_price" property="HEATER_PRICE"/>
+        <result column="heater_consumption" property="heaterConsumption"/>
+        <result column="television_consumption" property="televisionConsumption"/>
+    </resultMap>
+
+    <insert id="addMonthData" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO month_datas (year, month, oid, water_price, water_consumption, electricity_price,
+                            electricity_consumption, gas_price, gas_consumption, heater_price,
+                                 heater_consumption, television_consumption)
+        VALUES (#{year}, #{month}, #{oid}, #{WATER_PRICE}, #{waterConsumption}, #{ELECTRICITY_PRICE},
+                #{electricityConsumption}, #{GAS_PRICE}, #{gasConsumption}, #{HEATER_PRICE},
+                #{heaterConsumption}, #{televisionConsumption})
+    </insert>
+
+    <update id="updateMonthData">
+        UPDATE month_datas
+        <set>
+            <if test="year != null">
+                year = #{year},
+            </if>
+            <if test="month != null">
+                month = #{month},
+            </if>
+            <if test="WATER_PRICE != null">
+                water_price = #{WATER_PRICE},
+            </if>
+            <if test="waterConsumption != null">
+                water_consumption = #{waterConsumption},
+            </if>
+            <if test="ELECTRICITY_PRICE != null">
+                electricity_price = #{ELECTRICITY_PRICE},
+            </if>
+            <if test="electricityConsumption != null">
+                electricity_consumption = #{electricityConsumption},
+            </if>
+            <if test="GAS_PRICE != null">
+                gas_price = #{GAS_PRICE},
+            </if>
+            <if test="gasConsumption != null">
+                gas_consumption = #{gasConsumption},
+            </if>
+            <if test="HEATER_PRICE != null">
+                heater_price = #{HEATER_PRICE},
+            </if>
+            <if test="heaterConsumption != null">
+                heater_consumption = #{heaterConsumption},
+            </if>
+            <if test="televisionConsumption != null">
+                television_consumption = #{televisionConsumption},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteMonthData">
+        DELETE
+        FROM month_datas
+        WHERE id = #{mdid}
+    </delete>
+
+    <select id="getMonthData" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+        WHERE id = #{mdid}
+    </select>
+
+    <select id="getAllMonthData" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+    </select>
+
+    <select id="findMonthDataByYear" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+        WHERE year = #{year}
+    </select>
+
+    <select id="findMonthDataByMonth" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+        WHERE year = #{year} AND month = #{month}
+    </select>
+
+    <select id="findMonthDataByOwner" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+        WHERE oid = #{oid}
+    </select>
+
+    <select id="findMonthDataByOwnerAndYear" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+        WHERE oid = #{oid} AND year = #{year}
+    </select>
+
+    <select id="findMonthDataByOwnerAndMonth" resultMap="MonthDataEntityMap">
+        SELECT *
+        FROM month_datas
+        WHERE oid = #{oid} AND year = #{year} AND month = #{month}
+    </select>
+
+</mapper>

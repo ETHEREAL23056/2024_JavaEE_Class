@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--owner类映射文件-->
+<mapper namespace="com.my.finalwork.mappers.OwnerMapper">
+
+    <!--owner类映射方式-->
+    <resultMap id="OwnerEntityMap" type="com.my.finalwork.entity.Owner">
+        <result column="id" property="id"/>
+        <result column="id_number" property="IDNumber"/>
+        <result column="building_number" property="buildingNumber"/>
+        <result column="floor_number" property="floorNumber"/>
+        <result column="name" property="name"/>
+        <result column="working_unit" property="workingUnit"/>
+        <result column="telephone_number" property="telephoneNumber"/>
+        <result column="area" property="area"/>
+        <result column="uid" property="uid"/>
+    </resultMap>
+
+    <insert id="addOwner" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO owners (id_number, building_number, floor_number, name, working_unit,
+                            telephone_number, area, uid)
+        VALUES (#{IDNumber}, #{buildingNumber}, #{floorNumber}, #{name}, #{workingUnit},
+                #{telephoneNumber}, #{area}, #{uid})
+    </insert>
+
+    <update id="updateOwner">
+        UPDATE owners
+        <set>
+            <if test="IDNumber != null">
+                id_number = #{IDNumber},
+            </if>
+            <if test="buildingNumber != null">
+                building_number = #{buildingNumber},
+            </if>
+            <if test="floorNumber != null">
+                floor_number = #{floorNumber},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="workingUnit != null">
+                working_unit = #{workingUnit},
+            </if>
+            <if test="telephoneNumber != null">
+                telephone_number = #{telephoneNumber},
+            </if>
+            <if test="area != null">
+                area = #{area},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteOwner">
+        DELETE
+        FROM owners
+        WHERE id = #{oid}
+    </delete>
+
+    <select id="getOwner" resultMap="OwnerEntityMap">
+        SELECT *
+        FROM owners
+        WHERE id = #{oid}
+    </select>
+
+    <select id="getOwnerByID" resultMap="OwnerEntityMap">
+        SELECT *
+        FROM owners
+        WHERE id_number = #{IDNumber}
+    </select>
+
+    <select id="getOwnerByLocation" resultMap="OwnerEntityMap">
+        SELECT *
+        FROM owners
+        WHERE building_number = #{buildingNumber} AND floor_number = #{floorNumber}
+    </select>
+
+    <update id="bounderUser">
+        UPDATE owners
+        SET uid = #{uid}
+        WHERE id = #{oid}
+    </update>
+
+    <select id="getOwnerByUser" resultMap="OwnerEntityMap">
+        SELECT *
+        FROM owners
+        WHERE uid = #{uid}
+    </select>
+
+</mapper>
